@@ -1,5 +1,6 @@
 package com.elTomillo.demo.servicios;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.elTomillo.demo.entidades.registro;
+import com.elTomillo.demo.entidades.Registro;
 
 import com.elTomillo.demo.repositorios.registroRepositorio;
 
@@ -35,13 +36,13 @@ public class registroService implements UserDetailsService {
 	private registroRepositorio registroRepositorio;
 	
 	@Transactional
-	public registro crearRegistro(String name, String lastName,String businessname,
-			String email, String password, Date alta, Boolean activo) throws ErrorServicio  {
+	public Registro crearRegistro(String name, String lastName,String businessname,
+			String email, String password) throws ErrorServicio  {
 		 
 			validar(name, lastName,businessname, email, password);
 		
 		
-		registro reg = new registro();
+		Registro reg = new Registro();
 		
 		reg.setName(name);
 		reg.setLastName(lastName);
@@ -49,8 +50,8 @@ public class registroService implements UserDetailsService {
 		reg.setEmail(email);
 		String encriptada = new BCryptPasswordEncoder().encode(password);
 		reg.setPassword(encriptada);
-		reg.setAlta(alta);
-		reg.setActivo(activo);
+		reg.setAlta(new Date());
+		reg.setActivo(true);
 		registroRepositorio.save(reg);
 			
 		return reg;
@@ -94,10 +95,10 @@ public class registroService implements UserDetailsService {
 	}
 	@Transactional
 	public void modificarUsuario(String id, String name, String lastName,String businessname,
-			String email, String password, Date alta, Boolean activo) throws ErrorServicio {
+			String email, String password) throws ErrorServicio {
 		validar(name,  lastName,  businessname,  email,  password);
 		
-		Optional<registro> respuesta =registroRepositorio.findById(id);;
+		Optional<Registro> respuesta =registroRepositorio.findById(id);;
 		try {
 			respuesta = registroRepositorio.findById(id);
 		} catch (Exception e) {
@@ -106,14 +107,13 @@ public class registroService implements UserDetailsService {
 		}
 		if (respuesta.isPresent()) {
 
-			registro reg = respuesta.get();
+			Registro reg = respuesta.get();
 
 			reg.setName(name);
 			reg.setLastName(lastName);
 			reg.setEmail(email);
 			String encriptada = new BCryptPasswordEncoder().encode(password);
 			reg.setPassword(encriptada);
-
 			registroRepositorio.save(reg);
 		}else {
 			throw new ErrorServicio("No se encontro el usuario solicitado");
@@ -122,11 +122,11 @@ public class registroService implements UserDetailsService {
 	}
 	
 	public void EliminarRegistro(String id) throws ErrorServicio {
-		Optional<registro> respuesta = registroRepositorio.findById(id);
+		Optional<Registro> respuesta = registroRepositorio.findById(id);
 
 		if (respuesta.isPresent()) {
 
-			registro reg = respuesta.get();
+			Registro reg = respuesta.get();
 
 			registroRepositorio.delete(reg);
 
@@ -137,7 +137,7 @@ public class registroService implements UserDetailsService {
 	
 		public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	
-        registro reg = registroRepositorio.buscarPorEmail(email);
+        Registro reg = registroRepositorio.buscarPorEmail(email);
         
         if (reg != null) {
         	
@@ -165,21 +165,22 @@ public class registroService implements UserDetailsService {
 	}
 	
 	@Transactional
-	public List<registro> listarRegistrados() {
-		return registroRepositorio.findAll();
-
+	public List<Registro>listarRegistrados() {
+		List <Registro> xx = registroRepositorio.findAll();
+		return xx;
+		
 	}
 	
 	@Transactional
-	public registro findUserByEmail(String email, String password) throws ErrorServicio {
-		registro reg = registroRepositorio.buscarPorEmail(email);
+	public Registro findUserByEmail(String email, String password) throws ErrorServicio {
+		Registro reg = registroRepositorio.buscarPorEmail(email);
 		if (reg != null) {
 			return validarUsuario(reg, password);
 		} else {
 			throw new ErrorServicio("No existe el registro.");
 		}
 	}
-	private registro validarUsuario(registro reg, String password) throws ErrorServicio {
+	private Registro validarUsuario(Registro reg, String password) throws ErrorServicio {
 		if (reg.getPassword().equals(password)) {
 			return reg;
 		} else {
@@ -187,8 +188,8 @@ public class registroService implements UserDetailsService {
 		}
 	}
 	@Transactional
-	public registro findById(String id) throws ErrorServicio {
-		Optional<registro> respuesta = registroRepositorio.findById(id);
+	public Registro findById(String id) throws ErrorServicio {
+		Optional<Registro> respuesta = registroRepositorio.findById(id);
 		try {
 			respuesta = registroRepositorio.findById(id);
 		} catch (Exception e) {
@@ -196,7 +197,7 @@ public class registroService implements UserDetailsService {
 			e.printStackTrace();
 		}
 		if (respuesta.isPresent()) {
-			registro reg = respuesta.get();
+			Registro reg = respuesta.get();
 			return reg;
 		} else {
 			throw new ErrorServicio("No se encontro el registro solicitado");

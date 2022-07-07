@@ -7,17 +7,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.elTomillo.demo.entidades.registro;
+import com.elTomillo.demo.entidades.Registro;
 
 @Repository
-public interface registroRepositorio extends JpaRepository<registro, String> {
+public interface registroRepositorio extends JpaRepository<Registro, String> {
 
 	@Query(value = "SELECT a FROM Usuario a")
-	List<registro> findAllusuarios();
+	List<Registro> findAllusuarios();
 	
 	@Query(value = "SELECT c FROM Usuario c WHEREc.id = :id")
-	List<registro> findfindById(@Param("id") String id);
+	List<Registro> findfindById(@Param("id") String id);
 
 	@Query("SELECT c FROM Usuario c WHERE c.email = :email")
-	public registro buscarPorEmail(@Param("email") String email);
+	public Registro buscarPorEmail(@Param("email") String email);
 }

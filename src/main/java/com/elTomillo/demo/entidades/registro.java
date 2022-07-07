@@ -1,5 +1,6 @@
 package com.elTomillo.demo.entidades;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.Data;
 @Entity
 @Data
 
-public class registro {
+public class Registro {
 
 	@Id
 	@GeneratedValue(generator = "uuid")
