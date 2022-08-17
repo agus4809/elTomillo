@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.elTomillo.demo.servicios.registroService;
+import com.elTomillo.demo.servicios.UsuarioService;
 import com.example.demo.errores.ErrorServicio;
 import com.elTomillo.demo.entidades.*;
 import com.elTomillo.demo.repositorios.registroRepositorio;
@@ -26,7 +26,7 @@ import com.elTomillo.demo.repositorios.registroRepositorio;
 public class registroController {
 
 	@Autowired 
-	private registroService regServ;
+	private UsuarioService regServ;
 	@Autowired
 	private registroRepositorio regRepo;
 
@@ -76,10 +76,9 @@ public class registroController {
 		}
 		
 		@GetMapping("/listadoUsuarios")
-		public String listado (ModelMap modelo) {
+		public String listado (ModelMap modelo) {		
 			
-			
-			List <Registro> xx = regServ.listarRegistrados();
+			List <Usuario> xx = regServ.listarRegistrados();
 			modelo.addAttribute("usuario", xx);
 			
 			return "/listadoUsuarios";

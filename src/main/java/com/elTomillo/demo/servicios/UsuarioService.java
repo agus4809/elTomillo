@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.elTomillo.demo.entidades.Registro;
+import com.elTomillo.demo.entidades.Usuario;
 
 import com.elTomillo.demo.repositorios.registroRepositorio;
 
@@ -30,19 +30,19 @@ import com.example.demo.errores.ErrorServicio;
 
 import ch.qos.logback.core.boolex.Matcher;
 
-public class registroService implements UserDetailsService {
+public class UsuarioService implements UserDetailsService {
 
 	@Autowired
 	private registroRepositorio registroRepositorio;
 	
 	@Transactional
-	public Registro crearRegistro(String name, String lastName,String businessname,
+	public Usuario crearRegistro(String name, String lastName,String businessname,
 			String email, String password) throws ErrorServicio  {
 		 
 			validar(name, lastName,businessname, email, password);
 		
 		
-		Registro reg = new Registro();
+		Usuario reg = new Usuario();
 		
 		reg.setName(name);
 		reg.setLastName(lastName);
@@ -50,7 +50,7 @@ public class registroService implements UserDetailsService {
 		reg.setEmail(email);
 		String encriptada = new BCryptPasswordEncoder().encode(password);
 		reg.setPassword(encriptada);
-		reg.setAlta(new Date());
+		reg.setAlta(LocalDate.now());
 		reg.setActivo(true);
 		registroRepositorio.save(reg);
 			
@@ -98,7 +98,7 @@ public class registroService implements UserDetailsService {
 			String email, String password) throws ErrorServicio {
 		validar(name,  lastName,  businessname,  email,  password);
 		
-		Optional<Registro> respuesta =registroRepositorio.findById(id);;
+		Optional<Usuario> respuesta =registroRepositorio.findById(id);
 		try {
 			respuesta = registroRepositorio.findById(id);
 		} catch (Exception e) {
@@ -107,7 +107,7 @@ public class registroService implements UserDetailsService {
 		}
 		if (respuesta.isPresent()) {
 
-			Registro reg = respuesta.get();
+			Usuario reg = respuesta.get();
 
 			reg.setName(name);
 			reg.setLastName(lastName);
@@ -122,11 +122,11 @@ public class registroService implements UserDetailsService {
 	}
 	
 	public void EliminarRegistro(String id) throws ErrorServicio {
-		Optional<Registro> respuesta = registroRepositorio.findById(id);
+		Optional<Usuario> respuesta = registroRepositorio.findById(id);
 
 		if (respuesta.isPresent()) {
 
-			Registro reg = respuesta.get();
+			Usuario reg = respuesta.get();
 
 			registroRepositorio.delete(reg);
 
@@ -137,7 +137,7 @@ public class registroService implements UserDetailsService {
 	
 		public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	
-        Registro reg = registroRepositorio.buscarPorEmail(email);
+        Usuario reg = registroRepositorio.buscarPorEmail(email);
         
         if (reg != null) {
         	
@@ -165,22 +165,22 @@ public class registroService implements UserDetailsService {
 	}
 	
 	@Transactional
-	public List<Registro>listarRegistrados() {
-		List <Registro> xx = registroRepositorio.findAll();
+	public List<Usuario>listarRegistrados() {
+		List <Usuario> xx = registroRepositorio.findAll();
 		return xx;
 		
 	}
 	
 	@Transactional
-	public Registro findUserByEmail(String email, String password) throws ErrorServicio {
-		Registro reg = registroRepositorio.buscarPorEmail(email);
+	public Usuario findUserByEmail(String email, String password) throws ErrorServicio {
+		Usuario reg = registroRepositorio.buscarPorEmail(email);
 		if (reg != null) {
 			return validarUsuario(reg, password);
 		} else {
 			throw new ErrorServicio("No existe el registro.");
 		}
 	}
-	private Registro validarUsuario(Registro reg, String password) throws ErrorServicio {
+	private Usuario validarUsuario(Usuario reg, String password) throws ErrorServicio {
 		if (reg.getPassword().equals(password)) {
 			return reg;
 		} else {
@@ -188,8 +188,8 @@ public class registroService implements UserDetailsService {
 		}
 	}
 	@Transactional
-	public Registro findById(String id) throws ErrorServicio {
-		Optional<Registro> respuesta = registroRepositorio.findById(id);
+	public Usuario findById(String id) throws ErrorServicio {
+		Optional<Usuario> respuesta = registroRepositorio.findById(id);
 		try {
 			respuesta = registroRepositorio.findById(id);
 		} catch (Exception e) {
@@ -197,7 +197,7 @@ public class registroService implements UserDetailsService {
 			e.printStackTrace();
 		}
 		if (respuesta.isPresent()) {
-			Registro reg = respuesta.get();
+			Usuario reg = respuesta.get();
 			return reg;
 		} else {
 			throw new ErrorServicio("No se encontro el registro solicitado");
