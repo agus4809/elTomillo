@@ -1,5 +1,6 @@
-package com.elTomillo.demo.repositorios;
+package com.elTomillo.demo.Repositorios;
 
-public class cursoRepositorio {
+@Repository
+public interface CursoRepositorio extends JpaRepository <Curso, Integer> {
 
 }
