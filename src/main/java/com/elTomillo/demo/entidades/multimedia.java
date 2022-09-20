@@ -10,15 +10,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class multimedia {
+public class Multimedia {
 
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	protected String id;
-	protected String mime;
-	protected Integer order;
-	protected String description;
-	
-	
+	private String id;
+	private String mime;
+	private Integer order;
+	private String description;
+
 }
