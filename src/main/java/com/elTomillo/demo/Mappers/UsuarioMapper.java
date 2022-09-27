@@ -15,12 +15,11 @@ public class UsuarioMapper {
     private ModelMapper mapper = new ModelMapper();
 
     public UsuarioDTO EntidadaDTO(Usuario usuario) {
-
         UsuarioDTO UsuarioDTO = mapper.map(usuario, UsuarioDTO.class);
         return UsuarioDTO;
     }
 
-    public Usuario DTOaModel(UsuarioDTO UsuarioDTO) {
+    public Usuario DTOaEntidad(UsuarioDTO UsuarioDTO) {
         Usuario usuario = mapper.map(UsuarioDTO, Usuario.class);
         return usuario;
     }

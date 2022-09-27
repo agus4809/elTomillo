@@ -1,4 +1,4 @@
-package com.elTomillo.demo.entidades;
+package com.elTomillo.demo.Entidades;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -7,39 +7,38 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import com.elTomillo.demo.Util.Rol;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.elTomillo.demo.enums.Rol;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Usuario {
-
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	protected String id;
-	protected String name;
-	protected String lastName;
-	protected String businessname;
-	protected String email;
-	protected String password;	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String nombre;
+	private String apellido;
+	private String nombreEmpresa;
+	private String email;
+	private String password;
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date nacimiento; 
+	private Date nacimiento;
 	@Temporal(TemporalType.TIMESTAMP)
-	protected LocalDate alta;
+	private LocalDate alta;
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date baja;
-	protected Boolean activo;
+	private Date baja;
+	private Boolean activo;
 	@Enumerated(EnumType.STRING)
-	protected Rol rol;
-	
-	
+	private Rol rol;
+
 }
